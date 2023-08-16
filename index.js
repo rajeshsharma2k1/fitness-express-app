@@ -2,14 +2,16 @@ const express = require("express");
 const path = require("path");
 const routes = require("./routes/api");
 const db = require("./config/connection");
-var cors = require('cors');
+const cors = require('cors');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://mellow-chebakia-b6eee0.netlify.app'
+}));
 
 // Serve up static assets
 // if (process.env.NODE_ENV === "production") {
