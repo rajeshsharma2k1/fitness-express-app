@@ -25,8 +25,8 @@ app.use(cors({
 app.use("/api", routes);
 
 db.once("open", () => {
-  app.listen(PORT, () => {
-    console.log(`API server running on port ${PORT}!`);
+  app.listen(PORT, (res) => {
+    return res.send(`API server running on port ${PORT}!`);
   });
 });
 
