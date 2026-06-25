@@ -19,15 +19,15 @@ module.exports = {
   },
 
   // create a user, sign a token, and send it back to sign up page
-  async createUser({ body }, res) {
+async createUser({ body }, res) {
+  try {
     const user = await User.create(body);
-
-    if (!user) {
-      return res.status(400).json({ message: "Something is wrong!" });
-    }
     const token = signToken(user);
     res.json({ token, user });
-  },
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+},
 
   // login a user, sign a token, and send it back to login page
   async login({ body }, res) {
@@ -35,13 +35,13 @@ module.exports = {
       $or: [{ username: body.username }, { email: body.email }],
     });
     if (!user) {
-      return res.status(400).json({ message: "Can't find this user" });
+      return res.status(401).json({ message: "Can't find this user" });
     }
 
     const correctPw = await user.isCorrectPassword(body.password);
 
     if (!correctPw) {
-      return res.status(400).json({ message: "Wrong password!" });
+      return res.status(401).json({ message: "Wrong password!" });
     }
     const token = signToken(user);
     res.json({ token, user });
